@@ -4,7 +4,11 @@
   "description": "An API and database of movies and how I feel about them",
   "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "knex": "knex",
+    "latest": "knex migrate:latest",
+    "rollback": "knex migrage:rollback",
+    "seed": "knex seed:run",
+    "test": "mocha"
   },
   "author": "Nolan Hellyer",
   "license": "ISC",
