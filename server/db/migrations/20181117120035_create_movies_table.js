@@ -10,6 +10,18 @@ exports.up = function(knex, Promise) {
     table.text("poster_url");
     table.integer("rating");
     table.timestamps(true, true);
+  })
+  .then(() => {
+    return knex.schema.raw(
+      `ALTER TABLE movies
+         ADD CHECK (rating < 6 AND rating > 0);`
+  );
+  })
+  .then(() => {
+    return knex.schema.raw(
+      `ALTER TABLE movies
+         ADD CHECK (year < 3000 AND year > 1920);`
+    );
   });
 };
 

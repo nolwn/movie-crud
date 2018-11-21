@@ -8,6 +8,8 @@
     "latest": "knex migrate:latest",
     "rollback": "knex migrage:rollback",
     "seed": "knex seed:run",
+    "run" : "node src/app.js",
+    "dev" : "nodemon src/app.js",
     "test": "mocha"
   },
   "author": "Nolan Hellyer",
