@@ -10,7 +10,7 @@ exports.seed = function(knex, Promise) {
           title: "Raising Arizona",
           director: "Joel Coen",
           year: 1987,
-          poster_url: "http://placeholder.com/50x90.png",
+          poster_url: "https://upload.wikimedia.org/wikipedia/en/3/31/Raising-Arizona-Poster.jpg",
           rating : 4
         },
         {
@@ -18,7 +18,7 @@ exports.seed = function(knex, Promise) {
           title: "Fear and Loathing in Las Vegas",
           director: "Terry Gillium",
           year: 1998,
-          poster_url: "http://placeholder.com/50x90.png",
+          poster_url: "https://upload.wikimedia.org/wikipedia/en/6/6f/FandlinLV.jpg",
           rating : 3
         },
         {
@@ -26,7 +26,7 @@ exports.seed = function(knex, Promise) {
           title: "Star Wars",
           director: "George Lucas",
           year: 1977,
-          poster_url: "http://placeholder.com/50x90.png",
+          poster_url: "https://upload.wikimedia.org/wikipedia/en/8/87/StarWarsMoviePoster1977.jpg",
           rating : 5
         },
         {
@@ -34,7 +34,7 @@ exports.seed = function(knex, Promise) {
           title: "The Departed",
           director: "Martin Scorsese",
           year: 2006,
-          poster_url: "http://placeholder.com/50x90.png",
+          poster_url: "https://upload.wikimedia.org/wikipedia/en/5/50/Departed234.jpg",
           rating: 2
         }
       ]);
