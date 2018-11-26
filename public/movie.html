@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>OMDB</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.5.0/dist/css/foundation.min.css"     integrity="sha256-VEEaOnBKVRoYPn4AID/tY/XKVxKEqXstoo/xZ6nemak= sha384-D46t32f421/hB30qwnim2pIcisNN5GU9+6m2Mfnd3dKp    TSFidZLa08/1StEiCFId sha512-WkgzH8VKemDfwrp18r+wgbx+oHXOkfd2kJs7ocAXdGDgonXDXh88E90IRtRZRXtO0IHprxYHYlY14h+wyTsUDA    ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="list.html">Movies</a></li>
+          <li><a href="about.html">About OMDB</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="grid-container">
+      <div class="grid-x grid-margin-x">
+        <aside class="cell small-3">
+          <img src="img/OMDB-logo.png" class="logo" alt="OMDB Logo">
+          <p>Welcome to the best movie database on the web! Using the latest in movie reviewing and information gathering techniques, we are <em>the</em> resources for all your movie needs.</p>
+          <p>And, unlike one of our better known competitors, we are willing to go on the record and say that we do not donate money to ISIS. It makes you wonder why IMDB won&rsquo;t deny allegations that they support terrorism.</p>
+        </aside>
+        <main class="cell small-9" id="movie-area">
+
+        </main>
+      </div>
+    </div>
+    <script type="text/javascript" src="js/bundle.js"></script>
+    <script>
+      buildMoviePage(false);
+    </script>
+
+    <!-- Compressed JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.5.0/dist/js/foundation.min.js" integrity="sha25    6-GZq6aeugpWo25iH//1eKmeK6FHCf+6KXTfoUpkCqPCA= sha384-vjxUQtbGw5FJMigaaFpXYyxoHHLb7LbvRywnMZOiPJeh5j9sl2rnmQ3iucue    gRm8 sha512-h7tIMIX/opZXfWkcTDbkO+nT0LePyAAwDacfYhWtgGUidV+Kkh3eesW52fPSxKEsw3rgywKhQvghNLT4eDuUyw==" crossorigin=    "anonymous"></script>
+  </body>
+</html>

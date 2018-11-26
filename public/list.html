@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>OMDB</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.5.0/dist/css/foundation.min.css"     integrity="sha256-VEEaOnBKVRoYPn4AID/tY/XKVxKEqXstoo/xZ6nemak= sha384-D46t32f421/hB30qwnim2pIcisNN5GU9+6m2Mfnd3dKp    TSFidZLa08/1StEiCFId sha512-WkgzH8VKemDfwrp18r+wgbx+oHXOkfd2kJs7ocAXdGDgonXDXh88E90IRtRZRXtO0IHprxYHYlY14h+wyTsUDA    ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="list.html">Movies</a></li>
+          <li><a href="about.html">About OMDB</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="grid-container">
+      <div class="grid-x grid-margin-x">
+        <aside class="cell medium-3 small-12">
+          <img src="img/OMDB-logo.png" class="logo" alt="OMDB Logo">
+          <p>Feel free to add to or edit our world class database of movies. Here at OMDB, we know that the most up to date opinion is the last opinion given!</p>
+          <p>Your personal data is safe with us here at OMDB. Unlike those lying cheats over at IMDB, we promise that we do not sell your information to credit card thieves.</p>
+        </aside>
+        <main class="cell medium-9 small-12">
+          <h1>Movies</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Director</th>
+                <th>Year</th>
+                <th>Rating</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="movie-index">
+            </tbody>
+          </table>
+          <div class="grid-container">
+          </div>
+        </main>
+      </div>
+    </div>
+    <script type="text/javascript" src="js/bundle.js"></script>
+    <script type="text/javascript">
+      buildMovieIndex();
+    </script>
+
+    <!-- Compressed JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.5.0/dist/js/foundation.min.js" integrity="sha25    6-GZq6aeugpWo25iH//1eKmeK6FHCf+6KXTfoUpkCqPCA= sha384-vjxUQtbGw5FJMigaaFpXYyxoHHLb7LbvRywnMZOiPJeh5j9sl2rnmQ3iucue    gRm8 sha512-h7tIMIX/opZXfWkcTDbkO+nT0LePyAAwDacfYhWtgGUidV+Kkh3eesW52fPSxKEsw3rgywKhQvghNLT4eDuUyw==" crossorigin=    "anonymous"></script>
+  </body>
+</html>

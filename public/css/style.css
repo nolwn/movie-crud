@@ -1,0 +1,73 @@
+nav {
+  margin-bottom: 50px;
+  background: #333;
+}
+
+nav a {
+  color: white;
+  font-weight: bold;
+}
+
+nav li:hover a, nav li:hover {
+  text-decoration: none;
+  color: white;
+  background: gray;
+}
+
+img.logo {
+  display: block;
+  max-height: 200px;
+  margin: auto;
+}
+
+img.poster {
+  border: 1px #aeaeae solid;
+}
+
+ul.menu {
+  border-bottom: black solid 1px;
+}
+
+ul.menu li a {
+  padding: 30px;
+}
+
+label {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+button.movie-button {
+  float: right;
+  border-radius: 5px;
+}
+
+button.button {
+  margin: 10px;
+}
+
+.datum {
+  font-size: 1rem;
+  display: block;
+  font-weight: normal;
+  width: 100%;
+}
+
+.column-heading {
+  font-weight: bold;
+}
+
+.title-input {
+  font-size: 2.5rem;
+  width: 100%;
+}
+
+a.table-button {
+  visibility: hidden;
+}
+
+tr:hover a.table-button {
+  visibility: visible;
+}
