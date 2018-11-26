@@ -1,3 +1,5 @@
+const handlers = require("./event-handlers");
+
 /*
  *  Takes an object, movie and a boolean, edit.
  *  Inserts the elements directly into the DOM.
@@ -16,8 +18,8 @@ function renderShowPage(movie, edit) {
   // Cell for the movie info and its various elements
   const infoCell = document.createElement("div");
   const fields = ["title", "director", "year", "rating", "poster_url"];
-  const data = generateDataElements(edit ? fields : fields, edit);
-  const buttons = generateButtons(edit);
+  const data = generateDataElements(fields, edit);
+  const buttons = generateButtons(movie.id, edit);
 
   // Configure poster cell
   posterCell.classList.add("cell");
@@ -53,7 +55,7 @@ function renderShowPage(movie, edit) {
     infoCell.appendChild(data[field]);
   }
 
-  infoCell.appendChild(buttons);
+  posterCell.appendChild(buttons);
 
   // Add cells to grid-x element
   gridX.appendChild(infoCell);
@@ -73,8 +75,11 @@ function generateDataElements(properties, edit) {
 
   if (edit) {
     for (property of properties) {
+      let input = data[property]
       data[property] = document.createElement("input");
       data[property].setAttribute("placeholder", property);
+      data[property].setAttribute("name", property);
+      data[property].setAttribute("type", "text");
     }
 
     data.title.classList.add("title-input");
@@ -134,7 +139,7 @@ function fillInputValues(movie, data, properties, edit) {
   }
 }
 
-function generateButtons(edit) {
+function generateButtons(id, edit) {
   const buttons = document.createElement("div");
 
   if (edit) {
@@ -145,11 +150,17 @@ function generateButtons(edit) {
     submit.innerText = "Submit";
     submit.classList.add("button");
     submit.classList.add("movie-button");
+    submit.setAttribute("data_id", id);
+
+    submit.addEventListener("click", handlers.updateHandler);
+
     buttons.appendChild(submit);
 
     cancel.innerText = "Cancel";
     cancel.classList.add("button");
     cancel.classList.add("movie-button");
+    cancel.setAttribute("data_id", id);
+    cancel.addEventListener("click", handlers.cancelHandler);
     buttons.appendChild(cancel);
 
   }
@@ -160,6 +171,8 @@ function generateButtons(edit) {
     edit.innerText = "Edit";
     edit.classList.add("button");
     edit.classList.add("movie-button");
+    edit.setAttribute("data_id", id);
+    edit.addEventListener("click", handlers.editHandler);
     buttons.appendChild(edit);
   }
 

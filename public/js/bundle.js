@@ -1,5 +1,57 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const axios = require("axios");
+
+const server = "https://the-online-movie-database.herokuapp.com";
+
+/*
+ *  Takes and event object (e).
+ *  Takes the user to the movie page.
+ *  Returns nothing.
+ */
+function cancelHandler(e) {
+  const id = e.target.getAttribute("data_id");
+  location.href = "/movie.html?id=" + id;
+}
+
+/*
+ *  Takes and event object (e).
+ *  Takes the user to the edit page.
+ *  Returns nothing.
+ */
+function editHandler(e) {
+  const id = e.target.getAttribute("data_id");
+  location.href = "/edit.html?id=" + id;
+}
+
+/*
+ *  Takes and event object (e).
+ *  Submits the entry to the movie server.
+ *  Returns nothing.
+ */
+function updateHandler(e) {
+  const inputs = document.querySelectorAll("input[type=\'text\']").entries();
+  const values = {};
+  const id = e.target.getAttribute("data_id");
+
+  for ([ index, input ] of inputs) {
+    let field = input.getAttribute("name");
+    values[field] = input.value;
+  }
+
+  console.log(values);
+  axios.patch(server + "/movies/" + id, values)
+  .then(data => {
+    window.location.href = "/movie.html?id=" + id
+  })
+  .catch(err => {
+    console.log(err.data);
+  });
+}
+
+module.exports = { cancelHandler, editHandler, updateHandler };
+
+},{"axios":6}],2:[function(require,module,exports){
+const axios = require("axios");
 const renderAllMovies = require("./render-movies.js");
 const renderShowPage = require("./render-show-page.js");
 const { parseQueryString } = require("./utility.js");
@@ -30,7 +82,7 @@ window.buildMoviePage = function(edit) {
   }
 }
 
-},{"./render-movies.js":2,"./render-show-page.js":3,"./utility.js":4,"axios":5}],2:[function(require,module,exports){
+},{"./render-movies.js":3,"./render-show-page.js":4,"./utility.js":5,"axios":6}],3:[function(require,module,exports){
 /*
  *  Takes an array of movie objects and renders them.
  *  No return.
@@ -124,7 +176,9 @@ function createDeleteButton(id) {
 
 module.exports = renderAllMovies;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
+const handlers = require("./event-handlers");
+
 /*
  *  Takes an object, movie and a boolean, edit.
  *  Inserts the elements directly into the DOM.
@@ -143,8 +197,8 @@ function renderShowPage(movie, edit) {
   // Cell for the movie info and its various elements
   const infoCell = document.createElement("div");
   const fields = ["title", "director", "year", "rating", "poster_url"];
-  const data = generateDataElements(edit ? fields : fields, edit);
-  const buttons = generateButtons(edit);
+  const data = generateDataElements(fields, edit);
+  const buttons = generateButtons(movie.id, edit);
 
   // Configure poster cell
   posterCell.classList.add("cell");
@@ -180,7 +234,7 @@ function renderShowPage(movie, edit) {
     infoCell.appendChild(data[field]);
   }
 
-  infoCell.appendChild(buttons);
+  posterCell.appendChild(buttons);
 
   // Add cells to grid-x element
   gridX.appendChild(infoCell);
@@ -200,8 +254,11 @@ function generateDataElements(properties, edit) {
 
   if (edit) {
     for (property of properties) {
+      let input = data[property]
       data[property] = document.createElement("input");
       data[property].setAttribute("placeholder", property);
+      data[property].setAttribute("name", property);
+      data[property].setAttribute("type", "text");
     }
 
     data.title.classList.add("title-input");
@@ -261,7 +318,7 @@ function fillInputValues(movie, data, properties, edit) {
   }
 }
 
-function generateButtons(edit) {
+function generateButtons(id, edit) {
   const buttons = document.createElement("div");
 
   if (edit) {
@@ -272,11 +329,17 @@ function generateButtons(edit) {
     submit.innerText = "Submit";
     submit.classList.add("button");
     submit.classList.add("movie-button");
+    submit.setAttribute("data_id", id);
+
+    submit.addEventListener("click", handlers.updateHandler);
+
     buttons.appendChild(submit);
 
     cancel.innerText = "Cancel";
     cancel.classList.add("button");
     cancel.classList.add("movie-button");
+    cancel.setAttribute("data_id", id);
+    cancel.addEventListener("click", handlers.cancelHandler);
     buttons.appendChild(cancel);
 
   }
@@ -287,6 +350,8 @@ function generateButtons(edit) {
     edit.innerText = "Edit";
     edit.classList.add("button");
     edit.classList.add("movie-button");
+    edit.setAttribute("data_id", id);
+    edit.addEventListener("click", handlers.editHandler);
     buttons.appendChild(edit);
   }
 
@@ -314,7 +379,7 @@ function generateGrid() {
 
 module.exports = renderShowPage;
 
-},{}],4:[function(require,module,exports){
+},{"./event-handlers":1}],5:[function(require,module,exports){
 /*
  *  Take a query string and converts it into an object of key value pairs
  *  returns the final object.
@@ -341,9 +406,9 @@ function parseQueryString(queryString) {
 
 module.exports = { parseQueryString };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 module.exports = require('./lib/axios');
-},{"./lib/axios":7}],6:[function(require,module,exports){
+},{"./lib/axios":8}],7:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -527,7 +592,7 @@ module.exports = function xhrAdapter(config) {
 };
 
 }).call(this,require('_process'))
-},{"../core/createError":13,"./../core/settle":16,"./../helpers/btoa":20,"./../helpers/buildURL":21,"./../helpers/cookies":23,"./../helpers/isURLSameOrigin":25,"./../helpers/parseHeaders":27,"./../utils":29,"_process":31}],7:[function(require,module,exports){
+},{"../core/createError":14,"./../core/settle":17,"./../helpers/btoa":21,"./../helpers/buildURL":22,"./../helpers/cookies":24,"./../helpers/isURLSameOrigin":26,"./../helpers/parseHeaders":28,"./../utils":30,"_process":32}],8:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -581,7 +646,7 @@ module.exports = axios;
 // Allow use of default import syntax in TypeScript
 module.exports.default = axios;
 
-},{"./cancel/Cancel":8,"./cancel/CancelToken":9,"./cancel/isCancel":10,"./core/Axios":11,"./defaults":18,"./helpers/bind":19,"./helpers/spread":28,"./utils":29}],8:[function(require,module,exports){
+},{"./cancel/Cancel":9,"./cancel/CancelToken":10,"./cancel/isCancel":11,"./core/Axios":12,"./defaults":19,"./helpers/bind":20,"./helpers/spread":29,"./utils":30}],9:[function(require,module,exports){
 'use strict';
 
 /**
@@ -602,7 +667,7 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 var Cancel = require('./Cancel');
@@ -661,14 +726,14 @@ CancelToken.source = function source() {
 
 module.exports = CancelToken;
 
-},{"./Cancel":8}],10:[function(require,module,exports){
+},{"./Cancel":9}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./../defaults');
@@ -749,7 +814,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = Axios;
 
-},{"./../defaults":18,"./../utils":29,"./InterceptorManager":12,"./dispatchRequest":14}],12:[function(require,module,exports){
+},{"./../defaults":19,"./../utils":30,"./InterceptorManager":13,"./dispatchRequest":15}],13:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -803,7 +868,7 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 
 module.exports = InterceptorManager;
 
-},{"./../utils":29}],13:[function(require,module,exports){
+},{"./../utils":30}],14:[function(require,module,exports){
 'use strict';
 
 var enhanceError = require('./enhanceError');
@@ -823,7 +888,7 @@ module.exports = function createError(message, config, code, request, response) 
   return enhanceError(error, config, code, request, response);
 };
 
-},{"./enhanceError":15}],14:[function(require,module,exports){
+},{"./enhanceError":16}],15:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -911,7 +976,7 @@ module.exports = function dispatchRequest(config) {
   });
 };
 
-},{"../cancel/isCancel":10,"../defaults":18,"./../helpers/combineURLs":22,"./../helpers/isAbsoluteURL":24,"./../utils":29,"./transformData":17}],15:[function(require,module,exports){
+},{"../cancel/isCancel":11,"../defaults":19,"./../helpers/combineURLs":23,"./../helpers/isAbsoluteURL":25,"./../utils":30,"./transformData":18}],16:[function(require,module,exports){
 'use strict';
 
 /**
@@ -934,7 +999,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
   return error;
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var createError = require('./createError');
@@ -962,7 +1027,7 @@ module.exports = function settle(resolve, reject, response) {
   }
 };
 
-},{"./createError":13}],17:[function(require,module,exports){
+},{"./createError":14}],18:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -984,7 +1049,7 @@ module.exports = function transformData(data, headers, fns) {
   return data;
 };
 
-},{"./../utils":29}],18:[function(require,module,exports){
+},{"./../utils":30}],19:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1084,7 +1149,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = defaults;
 
 }).call(this,require('_process'))
-},{"./adapters/http":6,"./adapters/xhr":6,"./helpers/normalizeHeaderName":26,"./utils":29,"_process":31}],19:[function(require,module,exports){
+},{"./adapters/http":7,"./adapters/xhr":7,"./helpers/normalizeHeaderName":27,"./utils":30,"_process":32}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -1097,7 +1162,7 @@ module.exports = function bind(fn, thisArg) {
   };
 };
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 // btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
@@ -1135,7 +1200,7 @@ function btoa(input) {
 
 module.exports = btoa;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1203,7 +1268,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   return url;
 };
 
-},{"./../utils":29}],22:[function(require,module,exports){
+},{"./../utils":30}],23:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1219,7 +1284,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
     : baseURL;
 };
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1274,7 +1339,7 @@ module.exports = (
   })()
 );
 
-},{"./../utils":29}],24:[function(require,module,exports){
+},{"./../utils":30}],25:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1290,7 +1355,7 @@ module.exports = function isAbsoluteURL(url) {
   return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
 };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1360,7 +1425,7 @@ module.exports = (
   })()
 );
 
-},{"./../utils":29}],26:[function(require,module,exports){
+},{"./../utils":30}],27:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils');
@@ -1374,7 +1439,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
   });
 };
 
-},{"../utils":29}],27:[function(require,module,exports){
+},{"../utils":30}],28:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1429,7 +1494,7 @@ module.exports = function parseHeaders(headers) {
   return parsed;
 };
 
-},{"./../utils":29}],28:[function(require,module,exports){
+},{"./../utils":30}],29:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1458,7 +1523,7 @@ module.exports = function spread(callback) {
   };
 };
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 var bind = require('./helpers/bind');
@@ -1763,7 +1828,7 @@ module.exports = {
   trim: trim
 };
 
-},{"./helpers/bind":19,"is-buffer":30}],30:[function(require,module,exports){
+},{"./helpers/bind":20,"is-buffer":31}],31:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -1786,7 +1851,7 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -1972,4 +2037,4 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[1]);
+},{}]},{},[2]);

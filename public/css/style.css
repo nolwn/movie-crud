@@ -45,7 +45,7 @@ button.movie-button {
 }
 
 button.button {
-  margin: 10px;
+  margin: 50px 10px 10px 10px;
 }
 
 .datum {
@@ -59,8 +59,9 @@ button.button {
   font-weight: bold;
 }
 
-.title-input {
+input[type='text'].title-input {
   font-size: 2.5rem;
+  padding: 30px 10px;
   width: 100%;
 }
 
