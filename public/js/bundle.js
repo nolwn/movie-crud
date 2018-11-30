@@ -24,7 +24,7 @@ function editHandler(e) {
 }
 
 /*
- *  Takes and event object (e).
+ *  Takes an event object (e).
  *  Submits the entry to the movie server.
  *  Returns nothing.
  */
@@ -48,7 +48,22 @@ function updateHandler(e) {
   });
 }
 
-module.exports = { cancelHandler, editHandler, updateHandler };
+/*
+ *  Takes an event object (e).
+ *  Makes sure the poster URL input and the image being displayed are the same.
+ *  Returns nothing.
+ */
+function updatePoster(e) {
+  const poster = document.querySelector("img.poster");
+  const posterURL = poster.getAttribute("src");
+  const inputURL = e.target.value;
+
+  if (posterURL !== inputURL) {
+    poster.setAttribute("src", inputURL);
+  }
+}
+
+module.exports = { cancelHandler, editHandler, updateHandler, updatePoster };
 
 },{"axios":6}],2:[function(require,module,exports){
 const axios = require("axios");
@@ -262,6 +277,7 @@ function generateDataElements(properties, edit) {
     }
 
     data.title.classList.add("title-input");
+    data.poster_url.addEventListener("blur", handlers.updatePoster);
   }
 
   else {
@@ -330,7 +346,6 @@ function generateButtons(id, edit) {
     submit.classList.add("button");
     submit.classList.add("movie-button");
     submit.setAttribute("data_id", id);
-
     submit.addEventListener("click", handlers.updateHandler);
 
     buttons.appendChild(submit);
@@ -340,6 +355,7 @@ function generateButtons(id, edit) {
     cancel.classList.add("movie-button");
     cancel.setAttribute("data_id", id);
     cancel.addEventListener("click", handlers.cancelHandler);
+
     buttons.appendChild(cancel);
 
   }
@@ -348,10 +364,14 @@ function generateButtons(id, edit) {
     const edit = document.createElement("button");
 
     edit.innerText = "Edit";
+
     edit.classList.add("button");
     edit.classList.add("movie-button");
+
     edit.setAttribute("data_id", id);
+
     edit.addEventListener("click", handlers.editHandler);
+
     buttons.appendChild(edit);
   }
 
