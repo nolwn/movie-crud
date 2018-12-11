@@ -5,7 +5,6 @@
 function renderAllMovies(movies) {
   // Element into which the index will be inserted.
   const movieIndex = document.querySelector("#movie-index");
-  console.log(movies);
 
   // loop over the movies, rendering each one.
   movies.forEach(movie => {
@@ -70,8 +69,7 @@ function createEditButton(id) {
   return buttonCell;
 }
 
-/*
- *  Takes a single string, id, and builds a delete button for the corresponding
+/*  Takes a single string, id, and builds a delete button for the corresponding
  *  entry.
  *  Returns the button as a td element.
  */

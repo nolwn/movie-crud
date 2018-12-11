@@ -22,34 +22,56 @@ function editHandler(e) {
   location.href = "/edit.html?id=" + id;
 }
 
-/*
- *  Takes an event object (e).
- *  Submits the entry to the movie server.
- *  Returns nothing.
- */
-function updateHandler(e) {
+function buildEntry() {
+  // Below, so that we can iterate over the list (can't normally on NodeList)
   const inputs = document.querySelectorAll("input[type=\'text\']").entries();
-  const values = {};
-  const id = e.target.getAttribute("data_id");
+  const values = {}; // Will hold our final values
 
-  for ([ index, input ] of inputs) {
+  // Iterate over our list of nodes
+  for ([ _index, input ] of inputs) {
     let field = input.getAttribute("name");
     values[field] = input.value;
   }
 
+  return values;
+}
+
+/*
+ *  Takes an event object (e).
+ *  Submits the entry to the movie server via patch.
+ *  Returns nothing.
+ */
+function updateHandler(e) {
+  const id = e.target.getAttribute("data_id"); // Get the HTML stored movie id
+  const values = buildEntry();
+
+  values.id = id;
+
   axios.patch(server + "/movies/" + id, values)
-  .then(response => {
-    if (response.data.error) {
-      window.location.href = "/movie.html?id=" + id
-    }
+    .then(response => {
+      window.location.href = "/movie.html?id=" + id;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
 
-    else {
+/*
+ *  Takes an event object (e).
+ *  Submits the entry to the movie server via post.
+ *  Returns nothing.
+ */
+function newMovieHandler(e) {
+  const id = e.target.getAttribute("data_id");
+  const values = buildEntry();
 
-    }
-  })
-  .catch(err => {
-    console.log(err);
-  });
+  axios.post(server + "/movies/" + id, values)
+    .then(response => {
+      window.location.href = "/movie.html?id=" + id;
+    })
+    .catch(err => {
+      console.log(err);
+    });
 }
 
 /*

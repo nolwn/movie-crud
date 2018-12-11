@@ -17,18 +17,15 @@ function renderShowPage(movie, edit) {
 
   // Cell for the movie info and its various elements
   const infoCell = document.createElement("div");
-  const fields = ["title", "director", "year", "rating", "poster_url"];
+  const fields = ["title", "poster_url", "director", "year", "rating"];
   const data = generateDataElements(fields, edit);
-  const buttons = generateButtons(movie.id, edit);
+  const buttons = generateButtons(/*movie.id*/ 2, edit);
 
   // Configure poster cell
   posterCell.classList.add("cell");
   posterCell.classList.add("large-4");
   posterCell.classList.add("medium-12");
 
-  // Configure the poster image
-  posterImg.setAttribute("src", movie.poster_url);
-  posterImg.setAttribute("alt", movie.title + " poster");
 
   posterImg.classList.add("poster");
 
@@ -40,16 +37,23 @@ function renderShowPage(movie, edit) {
   infoCell.classList.add("large-8");
   infoCell.classList.add("medium-12");
 
-  fillInputValues(movie, data, fields.slice(1), edit);
+  if (movie) {
+    fillInputValues(movie, data, fields.slice(1), edit);
 
-  // Configure title
-  if (edit) {
-    data.title.value = movie.title;
+    // Configure the poster image
+    posterImg.setAttribute("src", movie.poster_url);
+    posterImg.setAttribute("alt", movie.title + " poster");
+
+    // Configure title
+    if (edit) {
+      data.title.value = movie.title;
+    }
+
+    else {
+      data.title.innerText = movie.title;
+    }
   }
 
-  else {
-    data.title.innerText = movie.title;
-  }
 
   for (field of fields) {
     infoCell.appendChild(data[field]);
