@@ -6,27 +6,32 @@ function getAll() {
 
 function getOne(id) {
   return db("movies")
-    .where({id : id});
+    .where({id : id})
+    .then(([ data ]) => data);
 }
 
 function create(body) {
   return db("movies")
     .insert(body)
-    .returning("*");
+    .returning("*")
+    .then(([ data ]) => data);
 }
 
 function update(id, update) {
   return db("movies")
     .update(update)
     .where({ id : id })
-    .returning("*");
+    .returning("*")
+    .then(([ data ]) => data);
+
 }
 
 function remove(id) {
   return db("movies")
     .del()
     .where({ id : id })
-    .returning("*");
+    .returning("*")
+    .then(([ data ]) => data);
 }
 
 module.exports = { getAll, getOne, create, update, remove };

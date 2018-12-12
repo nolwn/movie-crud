@@ -5,7 +5,7 @@ const handlers = require("./event-handlers");
  *  Inserts the elements directly into the DOM.
  *  No return.
  */
-function renderShowPage(movie, edit) {
+function renderShowPage(movie, edit, newMovie) {
 
   // Find the anchor on the page and generate the grid for it
   const movieArea = document.getElementById("movie-area");
@@ -19,7 +19,8 @@ function renderShowPage(movie, edit) {
   const infoCell = document.createElement("div");
   const fields = ["title", "poster_url", "director", "year", "rating"];
   const data = generateDataElements(fields, edit);
-  const buttons = generateButtons(/*movie.id*/ 2, edit);
+  const id = movie ? movie.id : undefined;
+  const buttons = generateButtons(edit, newMovie, id);
 
   // Configure poster cell
   posterCell.classList.add("cell");
@@ -37,8 +38,8 @@ function renderShowPage(movie, edit) {
   infoCell.classList.add("large-8");
   infoCell.classList.add("medium-12");
 
+  fillInputValues(movie, data, fields.slice(1), edit);
   if (movie) {
-    fillInputValues(movie, data, fields.slice(1), edit);
 
     // Configure the poster image
     posterImg.setAttribute("src", movie.poster_url);
@@ -55,7 +56,7 @@ function renderShowPage(movie, edit) {
   }
 
 
-  for (field of fields) {
+  for (let field of fields) {
     infoCell.appendChild(data[field]);
   }
 
@@ -115,17 +116,17 @@ function generateDataElements(properties, edit) {
 function fillInputValues(movie, data, properties, edit) {
 
   // Run through the properties array and generate labels from each property
-  for (property of properties) {
+  for (let property of properties) {
     let label = document.createElement("label");
 
     data[property].classList.add("datum");
 
     // if edit set the value, else set the innerText
-    if (edit) {
+    if (edit && movie) {
       data[property].value = movie[property];
     }
 
-    else {
+    else if (movie) {
       data[property].innerText = movie[property];
     }
 
@@ -144,19 +145,23 @@ function fillInputValues(movie, data, properties, edit) {
   }
 }
 
-function generateButtons(id, edit) {
+function generateButtons(edit, newMovie, id) {
   const buttons = document.createElement("div");
 
   if (edit) {
     const cancel = document.createElement("button");
     const submit = document.createElement("button");
-
     // Submit first because it floats left first, and so will be on the right
     submit.innerText = "Submit";
     submit.classList.add("button");
     submit.classList.add("movie-button");
-    submit.setAttribute("data_id", id);
-    submit.addEventListener("click", handlers.updateHandler);
+
+    if (id) {
+      submit.setAttribute("data_id", id);
+      submit.addEventListener("click", handlers.updateHandler);
+    } else {
+      submit.addEventListener("click", handlers.newMovieHandler);
+    }
 
     buttons.appendChild(submit);
 

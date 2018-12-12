@@ -1,3 +1,5 @@
+const { deleteHandler } = require("./event-handlers");
+
 /*
  *  Takes an array of movie objects and renders them.
  *  No return.
@@ -5,12 +7,20 @@
 function renderAllMovies(movies) {
   // Element into which the index will be inserted.
   const movieIndex = document.querySelector("#movie-index");
+  clearTable(movieIndex);
 
   // loop over the movies, rendering each one.
   movies.forEach(movie => {
     const movieElemenet = createMovie(movie);
     movieIndex.appendChild(movieElemenet);
   });
+}
+
+function clearTable(movieIndex) {
+  // loop over the table items, deleting each one.
+  while(movieIndex.children[0]) {
+    movieIndex.children[0].remove();
+  }
 }
 
 /*
@@ -79,8 +89,10 @@ function createDeleteButton(id) {
 
   deleteButton.innerText = "delete";
   deleteButton.classList.add("table-button");
+  deleteButton.setAttribute("data-id", id);
 
   deleteButton.style.color = "red"; // make the delete button red
+  deleteButton.addEventListener("click", deleteHandler);
 
   buttonCell.appendChild(deleteButton);
 

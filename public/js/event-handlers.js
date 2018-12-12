@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const server = "https://the-online-movie-database.herokuapp.com";
+const server = "http://127.0.0.1:3000";
 
 /*
  *  Takes and event object (e).
@@ -62,12 +62,12 @@ function updateHandler(e) {
  *  Returns nothing.
  */
 function newMovieHandler(e) {
-  const id = e.target.getAttribute("data_id");
+  // const id = e.target.getAttribute("data_id");
   const values = buildEntry();
 
-  axios.post(server + "/movies/" + id, values)
+  axios.post(server + "/movies", values)
     .then(response => {
-      window.location.href = "/movie.html?id=" + id;
+      window.location.href = "/movie.html?id=" + response.data.id;
     })
     .catch(err => {
       console.log(err);
@@ -90,15 +90,18 @@ function updatePoster(e) {
 }
 
 function deleteHandler(e) {
-  const id = e.target.getAttribute("data_id");
+  const id = e.target.getAttribute("data-id");
+
+  console.log(e.target);
 
   axios.delete(server + "/movies/" + id)
   .then(response => {
     // redraw page
+    buildMovieIndex();
   })
   .catch(err => {
     console.log(err);
   });
 }
 
-module.exports = { cancelHandler, editHandler, updateHandler, updatePoster };
+module.exports = { cancelHandler, editHandler, updateHandler, updatePoster, newMovieHandler, deleteHandler };

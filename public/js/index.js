@@ -1,9 +1,8 @@
 const axios = require("axios");
 const renderAllMovies = require("./render-movies");
 const renderShowPage = require("./render-show-page");
-const newPostButton = require("./post-button");
 const { parseQueryString } = require("./utility");
-const server = "https://the-online-movie-database.herokuapp.com";
+const server = "http://127.0.0.1:3000";
 
 /*
  *  Constructs the an html element that is a table containing all the movies in
@@ -12,10 +11,9 @@ const server = "https://the-online-movie-database.herokuapp.com";
 window.buildMovieIndex = function() {
   axios.get(server + "/movies")
   .then(res => {
-
     renderAllMovies(res.data)
   })
-  .catch(err => console.log(err));
+  .catch(err => console.error(err));
 }
 
 /*
@@ -24,15 +22,15 @@ window.buildMovieIndex = function() {
 window.buildMoviePage = function(edit) {
   const id = parseQueryString(window.location.search).id;
 
-  // if (typeof id === 'undefined') {
-  //   window.location.replace("404.html");
-  // } else {
+  if (typeof id === 'undefined') {
+    window.location.replace("404.html");
+  } else {
     axios.get(server + "/movies/" + id)
-    .then(res => renderShowPage(res.data[0], edit))
-    .catch(err => console.log(err));
-  // }
+    .then(res => renderShowPage(res.data, edit, false))
+    .catch(err => console.error(err));
+  }
 }
 
 window.buildNewPostPage = function() {
-  renderShowPage(null, true)
+  renderShowPage(null, true, true)
 }
