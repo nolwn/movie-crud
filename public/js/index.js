@@ -2,7 +2,7 @@ const axios = require("axios");
 const renderAllMovies = require("./render-movies");
 const renderShowPage = require("./render-show-page");
 const { parseQueryString } = require("./utility");
-const server = "http://127.0.0.1:3000";
+const server = "https://the-online-movie-database.herokuapp.com";
 
 /*
  *  Constructs the an html element that is a table containing all the movies in

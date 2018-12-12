@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const server = "http://127.0.0.1:3000";
+const server = "https://the-online-movie-database.herokuapp.com";
 
 /*
  *  Takes and event object (e).
@@ -9,7 +9,7 @@ const server = "http://127.0.0.1:3000";
  */
 function cancelHandler(e) {
   const id = e.target.getAttribute("data_id");
-  location.href = "/movie.html?id=" + id;
+  location.href = "/list.html";
 }
 
 /*
